@@ -77,8 +77,14 @@ fn panic_if_uncommitted_changes(stdout: Vec<u8>) {
         .split(|&b| b == b'\n')
         .map(|line| str::from_utf8(line).unwrap());
     lines.next().unwrap();
-    let git_status_message = lines.next().unwrap();
-    if git_status_message != "nothing to commit, working tree clean" {
+    let mut uncommitted_changes = true;
+    while let Some(line) = lines.next() {
+        if line != "nothing to commit, working tree clean" {
+            uncommitted_changes = false;
+        }
+    }
+
+    if uncommitted_changes {
         panic!("Can't publish when there are uncommitted changes");
     }
 }
