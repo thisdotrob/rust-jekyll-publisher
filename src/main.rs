@@ -6,6 +6,7 @@ fn setup() {
     let (remote_name, remote_addr) = parse_git_remote_details(stdout);
 
     run_command("echo _site >> .gitignore");
+    run_command("echo 'exclude:\n  - \"rust-jekyll-publisher\"' >> _config.yml");
     run_command("jekyll build");
     run_command("git checkout -b sources");
     run_command("git add -A");
